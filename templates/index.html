@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DevOps Monitor</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>🚀 DevOps Monitoring Dashboard</h1>
+
+    <div class="card">
+        <h2>CPU Usage</h2>
+        <div class="bar"><div id="cpu"></div></div>
+    </div>
+
+    <div class="card">
+        <h2>RAM Usage</h2>
+        <div class="bar"><div id="ram"></div></div>
+    </div>
+
+    <div class="card">
+        <h2>Disk Usage</h2>
+        <div class="bar"><div id="disk"></div></div>
+    </div>
+
+<script>
+function fetchStats() {
+    fetch('/stats')
+    .then(response => response.json())
+    .then(data => {
+        updateBar('cpu', data.cpu);
+        updateBar('ram', data.ram);
+        updateBar('disk', data.disk);
+    });
+}
+
+function updateBar(id, value) {
+    let bar = document.getElementById(id);
+    bar.style.width = value + "%";
+    bar.innerHTML = value + "%";
+}
+
+setInterval(fetchStats, 2000);
+fetchStats();
+</script>
+
+</body>
+</html>
