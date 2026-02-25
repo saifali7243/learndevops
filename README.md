@@ -1,309 +1,252 @@
----
+🚀 DevOps Observability Stack – JARVIS War Room
 
-# 🚀 DevOps Production Monitoring Stack
+A complete DevOps monitoring stack built using:
 
-A complete containerized observability stack built using:
+🐳 Docker & Docker Compose
 
-* Docker & Docker Compose
-* Flask (instrumented with Prometheus)
-* PostgreSQL
-* cAdvisor (Container Metrics)
-* Node Exporter (Host Metrics)
-* Prometheus (Metrics Collection)
-* Grafana (Visualization)
+📊 Prometheus
 
-This project simulates a real-world DevOps monitoring setup used in production environments.
+📈 Grafana
 
----
+🖥 Node Exporter
 
-# 🏗 Architecture
+📦 cAdvisor
 
-User → Flask App → Prometheus → Grafana
-Docker Containers → cAdvisor → Prometheus
-Host Metrics → Node Exporter → Prometheus
+🌐 Flask Application with Prometheus Metrics
 
-Components:
+This project demonstrates real-world DevOps observability engineering including:
 
-* **Flask App** → Exposes `/metrics`
-* **PostgreSQL** → Database service
-* **cAdvisor** → Container-level metrics
-* **Node Exporter** → Host-level metrics
-* **Prometheus** → Scrapes all metrics
-* **Grafana** → Professional monitoring dashboard
+Host system monitoring
 
----
+Docker container monitoring
 
-# 📦 Tech Stack
+Application-level metrics
 
-| Component      | Purpose                     |
-| -------------- | --------------------------- |
-| Docker         | Containerization            |
-| Docker Compose | Multi-service orchestration |
-| Flask          | Backend service             |
-| Prometheus     | Time-series database        |
-| Grafana        | Dashboard visualization     |
-| cAdvisor       | Docker metrics              |
-| Node Exporter  | Host metrics                |
+Error tracking
 
----
+Professional Grafana dashboards
 
-# 🛠 Prerequisites
+Clean DevOps command-center UI
 
-* Linux (Ubuntu / Linux Mint)
-* Docker (official repository version)
-* Docker Compose v2
-* Git
-
-Verify installation:
-
-```bash
-docker --version
-docker compose version
-```
-
----
-
-# ⚙️ Project Setup (Step-by-Step)
-
----
-
-## 1️⃣ Clone Repository
-
-```bash
-git clone https://github.com/YOUR_USERNAME/devops-mini-stack.git
-cd devops-mini-stack
-```
-
----
-
-## 2️⃣ Project Structure
-
-```
-devops-mini-stack/
+🧱 Architecture Overview
+Flask App  →  Prometheus  →  Grafana
+              ↑
+         Node Exporter
+              ↑
+           cAdvisor
+📂 Project Structure
+devops-observability-stack/
 │
 ├── app.py
-├── requirements.txt
 ├── Dockerfile
 ├── docker-compose.yml
 ├── prometheus.yml
-├── templates/
-│   └── index.html
-├── static/
-│   └── style.css
-└── devops-pro-monitoring-dashboard.json
-```
+│
+├── grafana-dashboards/
+│   ├── jarvis-war-room-professional.json
+│   ├── jarvis-war-room-v6.json
+│   ├── jarvis-command-center-v4.json
+│   └── ...
+│
+└── README.md
 
----
+All dashboards are stored inside:
 
-## 3️⃣ Build and Run Stack
+grafana-dashboards/
 
-```bash
-docker compose down -v
-docker compose up --build
-```
+You can directly import them into Grafana.
 
----
+⚙️ Features
+🖥 HOST SYSTEM
 
-# 🌐 Access Services
+🔥 Hero Memory Gauge
 
-| Service    | URL                                            |
-| ---------- | ---------------------------------------------- |
-| Flask App  | [http://localhost:5000](http://localhost:5000) |
-| cAdvisor   | [http://localhost:8080](http://localhost:8080) |
-| Prometheus | [http://localhost:9090](http://localhost:9090) |
-| Grafana    | [http://localhost:3000](http://localhost:3000) |
+📈 Host Memory Graph (GB)
 
----
+⚡ Host CPU Gauge
 
-# 📊 Grafana Setup
+💻 CPU Per Core Graph
 
-### Default Login:
+⏱ Uptime
 
-```
+💾 Disk Usage %
+
+📊 Disk I/O (Read / Write)
+
+📈 Load Average
+
+🔄 Swap Usage %
+
+🌐 Network RX/TX
+
+🌡 System Temperature
+
+🔌 TCP Connections
+
+⚙ Running Processes
+
+🐳 DOCKER MONITORING
+
+CPU % Per Container
+
+Memory MB Per Container
+
+Running Containers Count
+
+Docker Health
+
+Container Dropdown Filter
+
+🌐 APPLICATION METRICS
+
+Total Requests
+
+Request Rate
+
+Error Rate
+
+Total Errors
+
+/metrics endpoint exposed for Prometheus
+
+🛠 Setup Instructions
+1️⃣ Clone Repository
+git clone <your-repo-url>
+cd devops-observability-stack
+2️⃣ Start the Stack
+docker compose up --build -d
+🌍 Services & URLs
+Service	URL
+Flask App	http://localhost:5000
+
+Prometheus	http://localhost:9090
+
+Grafana	http://localhost:3000
+
+cAdvisor	http://localhost:8080
+
+Node Exporter	http://localhost:9100
+🔐 Grafana Login
+
+Default credentials:
+
 Username: admin
-Password: admin
-```
+Password: admin123
 
----
+(If defined inside docker-compose)
 
-## 🔹 Add Prometheus Data Source
+📊 Import Dashboards
 
-1. Go to Settings → Data Sources
-2. Add Prometheus
-3. Set URL:
+Open Grafana → Dashboards → Import
 
-```
-http://prometheus:9090
-```
+Click Upload JSON file
 
-4. Save & Test
+Select a dashboard from:
 
----
+grafana-dashboards/
 
-## 🔹 Import Professional Dashboard
+Choose Prometheus as data source
 
-1. Go to Dashboards → Import
-2. Upload:
+Click Import
 
-```
-devops-pro-monitoring-dashboard.json
-```
+📈 Application Metrics
 
-3. Select Prometheus data source
-4. Click Import
+The Flask app exposes metrics at:
 
----
+http://localhost:5000/metrics
 
-# 📈 Dashboard Features
+Available metrics:
 
-### 🔥 Host Metrics
+app_requests_total
 
-* CPU Usage %
-* Memory Usage %
-* System Uptime
+app_errors_total
 
-### 🔥 Application Metrics
+To simulate an error:
 
-* Total HTTP Requests
+http://localhost:5000/error
 
-### 🔥 Docker Metrics
+This increments the error counter.
 
-* CPU % per container
-* Memory % per container
-* Total container CPU %
-* Docker health status
+🧠 Prometheus Targets
 
-Refresh interval: 5 seconds
-Time window: Last 15 minutes
+Visit:
 
----
+http://localhost:9090/targets
 
-# 📜 Prometheus Configuration
+Ensure all are UP:
 
-Scraped targets:
+app
 
-* Flask app (`/metrics`)
-* cAdvisor
-* Node Exporter
+node_exporter
 
-Example:
+cadvisor
 
-```yaml
-scrape_configs:
-  - job_name: "cadvisor"
-    static_configs:
-      - targets: ["cadvisor:8080"]
+💾 Data Persistence
 
-  - job_name: "app"
-    static_configs:
-      - targets: ["app:5000"]
+Docker volumes are configured for:
 
-  - job_name: "node"
-    static_configs:
-      - targets: ["node_exporter:9100"]
-```
+Grafana
 
----
+Prometheus
 
-# 🧠 Key Learning Outcomes
+PostgreSQL (if used)
+
+⚠ Do NOT run:
+
+docker compose down -v
+
+This deletes volumes and dashboards.
+
+Use instead:
+
+docker compose down
+🔍 Example PromQL Queries
+Host CPU
+100 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
+Container CPU
+sum(rate(container_cpu_usage_seconds_total[5m])) by (container) * 100
+Error Rate
+rate(app_errors_total[5m])
+🎯 Learning Outcomes
 
 This project demonstrates:
 
-✔ Linux administration
-✔ Docker container orchestration
-✔ Metrics instrumentation
-✔ PromQL query writing
-✔ Observability architecture
-✔ Real-time monitoring
-✔ Dashboard design
-✔ Production-style monitoring stack
+Real DevOps monitoring stack
 
----
+Prometheus metrics instrumentation
 
-# 🔍 Useful PromQL Queries Used
+PromQL usage
 
-### Host CPU %
+Docker observability
 
-```
-100 - (avg by(instance)(rate(node_cpu_seconds_total{mode="idle"}[1m])) * 100)
-```
+Host-level monitoring
 
-### Host Memory %
+Professional Grafana dashboards
 
-```
-(1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100
-```
+Practical DevOps engineering
 
-### CPU % Per Container
+🚀 Future Improvements
 
-```
-sum(rate(container_cpu_usage_seconds_total[1m])) by (name) * 100
-```
+Alertmanager integration
 
-### Memory % Per Container
+Slack / Email alerts
 
-```
-(container_memory_usage_bytes / container_spec_memory_limit_bytes) * 100
-```
+Loki log aggregation
 
----
+Kubernetes deployment
 
-# 🔐 Optional Enhancements
+CI/CD integration
 
-Future Improvements:
+Terraform infrastructure provisioning
 
-* Alertmanager integration
-* Slack / Email alerts
-* SSL via Nginx reverse proxy
-* Deploy on AWS EC2
-* Kubernetes migration
-* Log aggregation (Loki)
-* CI/CD pipeline integration
+🏁 Conclusion
 
----
+This repository simulates a production-style DevOps observability environment and provides a professional monitoring dashboard for:
 
-# 🚀 Deploy on AWS (Optional)
+Host metrics
 
-1. Launch EC2 instance
-2. Install Docker
-3. Clone repository
-4. Run:
+Container metrics
 
-```bash
-docker compose up -d
-```
+Application metrics
 
-Expose ports 3000, 9090, 5000 via Security Group.
-
----
-
-# 🏁 Conclusion
-
-This project simulates a real-world DevOps monitoring stack using industry-standard tools.
-
-It demonstrates practical experience in:
-
-* Infrastructure
-* Monitoring
-* Metrics collection
-* Observability engineering
-* Container orchestration
-
----
-
-# 📬 Author
-
-Saif Ali Shaikh
-DevOps & Systems Enthusiast
-
----
-
-# ⭐ If You Like This Project
-
-Give it a star ⭐
-Fork it 🍴
-Improve it 🚀
-
----
-
-
+Built as a hands-on DevOps learning project.
