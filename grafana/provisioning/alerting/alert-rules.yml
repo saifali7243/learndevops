@@ -1,0 +1,64 @@
+apiVersion: 1
+
+groups:
+  - name: host-memory-alerts
+    interval: 1m
+    rules:
+
+      - uid: memory_warning
+        title: Memory Usage Warning
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 60
+                  operator:
+                    type: and
+                  reducer:
+                    type: last
+        for: 2m
+        annotations:
+          summary: "⚠ Memory usage above 60%"
+        labels:
+          severity: warning
+
+      - uid: memory_critical
+        title: Memory Usage Critical
+        condition: C
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+              refId: A
+          - refId: C
+            datasourceUid: __expr__
+            model:
+              type: threshold
+              expression: A
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 80
+                  operator:
+                    type: and
+                  reducer:
+                    type: last
+        for: 1m
+        annotations:
+          summary: "🚨 Memory usage above 80%"
+        labels:
+          severity: critical
