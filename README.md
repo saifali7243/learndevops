@@ -57,7 +57,7 @@ grafana-dashboards/
 You can directly import them into Grafana.
 
 ⚙️ Features
-🖥 HOST SYSTEM
+🖥 Host System
 
 🔥 Hero Memory Gauge
 
@@ -85,7 +85,7 @@ You can directly import them into Grafana.
 
 ⚙ Running Processes
 
-🐳 DOCKER MONITORING
+🐳 Docker Monitoring
 
 CPU % Per Container
 
@@ -97,7 +97,7 @@ Docker Health
 
 Container Dropdown Filter
 
-🌐 APPLICATION METRICS
+🌐 Application Metrics
 
 Total Requests
 
@@ -128,20 +128,17 @@ cAdvisor	http://localhost:8080
 Node Exporter	http://localhost:9100
 🔐 Grafana Login
 
-Default credentials:
+Default credentials (if set in docker-compose):
 
 Username: admin
 Password: admin123
-
-(If defined inside docker-compose)
-
 📊 Import Dashboards
 
 Open Grafana → Dashboards → Import
 
 Click Upload JSON file
 
-Select a dashboard from:
+Select a file from:
 
 grafana-dashboards/
 
@@ -151,7 +148,7 @@ Click Import
 
 📈 Application Metrics
 
-The Flask app exposes metrics at:
+Metrics endpoint:
 
 http://localhost:5000/metrics
 
@@ -164,16 +161,13 @@ app_errors_total
 To simulate an error:
 
 http://localhost:5000/error
-
-This increments the error counter.
-
 🧠 Prometheus Targets
 
 Visit:
 
 http://localhost:9090/targets
 
-Ensure all are UP:
+Ensure all services are UP:
 
 app
 
@@ -200,20 +194,13 @@ This deletes volumes and dashboards.
 Use instead:
 
 docker compose down
-🔍 Example PromQL Queries
-Host CPU
-100 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
-Container CPU
-sum(rate(container_cpu_usage_seconds_total[5m])) by (container) * 100
-Error Rate
-rate(app_errors_total[5m])
 🎯 Learning Outcomes
 
 This project demonstrates:
 
 Real DevOps monitoring stack
 
-Prometheus metrics instrumentation
+Prometheus instrumentation
 
 PromQL usage
 
@@ -237,7 +224,7 @@ Kubernetes deployment
 
 CI/CD integration
 
-Terraform infrastructure provisioning
+Terraform provisioning
 
 🏁 Conclusion
 
@@ -250,3 +237,27 @@ Container metrics
 Application metrics
 
 Built as a hands-on DevOps learning project.
+
+Now this will render:
+
+Proper headings
+
+Clean spacing
+
+Clear sections
+
+No collapsed formatting
+
+Looks professional on GitHub
+
+If you want, I can now:
+
+Add GitHub badges at the top
+
+Add screenshot section
+
+Add architecture diagram image
+
+Make it recruiter-optimized for resume impact
+
+You're very close to having a portfolio-level DevOps project.
