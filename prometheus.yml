@@ -1,4 +1,4 @@
-iiglobal:
+global:
   scrape_interval: 5s
 
 scrape_configs:

@@ -31,6 +31,7 @@ services:
     image: prom/prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     ports:
       - "9090:9090"
 
@@ -40,11 +41,22 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+    volumes:
+      - grafana_data:/var/lib/grafana
 
   node_exporter:
     image: prom/node-exporter
     ports:
       - "9100:9100"
+    pid: "host"
+    volumes:
+      - /:/host:ro,rslave
+    command:
+      - '--path.rootfs=/host'
 
 volumes:
   postgres_data:
+  grafana_data:
+  prometheus_data:
