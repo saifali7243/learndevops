@@ -5,6 +5,7 @@ from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST
 app = Flask(__name__)
 
 REQUEST_COUNT = Counter('app_requests_total', 'Total App HTTP Requests')
+ERROR_COUNT = Counter('app_errors_total', 'Total App Errors')
 
 @app.route("/")
 def dashboard():
@@ -19,6 +20,11 @@ def stats():
         "disk": psutil.disk_usage('/').percent
     }
     return jsonify(data)
+
+@app.route("/error")
+def error():
+    ERROR_COUNT.inc()
+    return "Error simulated", 500
 
 @app.route("/metrics")
 def metrics():
