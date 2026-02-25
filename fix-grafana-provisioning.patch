@@ -1,0 +1,40 @@
+diff --git a/grafana/provisoning/dashboards/dashboards.yml b/grafana/provisioning/dashboards/dashboards.yml
+similarity index 100%
+rename from grafana/provisoning/dashboards/dashboards.yml
+rename to grafana/provisioning/dashboards/dashboards.yml
+
+diff --git a/grafana/provisoning/datasources/prometheus.yml b/grafana/provisioning/datasources/prometheus.yml
+similarity index 100%
+rename from grafana/provisoning/datasources/prometheus.yml
+rename to grafana/provisioning/datasources/prometheus.yml
+
+diff --git a/docker-compose.yml b/docker-compose.yml
+index 1234567..abcdef0 100644
+--- a/docker-compose.yml
++++ b/docker-compose.yml
+@@ -40,10 +40,12 @@ services:
+   grafana:
+     image: grafana/grafana:latest
+     ports:
+       - "3000:3000"
+     volumes:
+-      - ./grafana/provisoning:/etc/grafana/provisioning
+-      - ./dashboards/grafana dashboards:/var/lib/grafana/dashboards
++      - grafana_data:/var/lib/grafana
++      - ./grafana/provisioning:/etc/grafana/provisioning
++      - ./grafana-dashboards:/var/lib/grafana/dashboards
+     depends_on:
+       - prometheus
+
++volumes:
++  grafana_data:
+
+diff --git a/dashboards/grafana dashboards/jarvis-war-room-professional.json b/grafana-dashboards/jarvis-war-room-professional.json
+similarity index 100%
+rename from dashboards/grafana dashboards/jarvis-war-room-professional.json
+rename to grafana-dashboards/jarvis-war-room-professional.json
+
+diff --git a/dashboards/grafana dashboards/jarvis-war-room-v6.json b/grafana-dashboards/jarvis-war-room-v6.json
+similarity index 100%
+rename from dashboards/grafana dashboards/jarvis-war-room-v6.json
+rename to grafana-dashboards/jarvis-war-room-v6.json

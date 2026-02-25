@@ -1,0 +1,281 @@
+{
+  "title": "JARVIS – Professional DevOps War Room",
+  "timezone": "browser",
+  "refresh": "5s",
+  "schemaVersion": 38,
+  "version": 1,
+  "style": "dark",
+  "tags": ["jarvis", "professional", "devops"],
+  "time": { "from": "now-30m", "to": "now" },
+
+  "templating": {
+    "list": [
+      {
+        "name": "container",
+        "type": "query",
+        "datasource": "Prometheus",
+        "query": "label_values(container_cpu_usage_seconds_total, container)",
+        "multi": true,
+        "includeAll": true,
+        "refresh": 2
+      }
+    ]
+  },
+
+  "panels": [
+
+    { "type": "row", "title": "🖥 HOST SYSTEM" },
+
+    {
+      "type": "gauge",
+      "title": "🔥 Hero Memory %",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 1 },
+      "targets": [
+        {
+          "expr": "(1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "#00ffff", "value": null },
+              { "color": "#ffaa00", "value": 70 },
+              { "color": "#ff0033", "value": 85 }
+            ]
+          }
+        }
+      }
+    },
+
+    {
+      "type": "timeseries",
+      "title": "Host Memory Usage (GB)",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 1 },
+      "targets": [
+        {
+          "expr": "(node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / 1024 / 1024 / 1024",
+          "legendFormat": "Used",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "gigabytes" } }
+    },
+
+    {
+      "type": "gauge",
+      "title": "Host CPU %",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 9 },
+      "targets": [
+        {
+          "expr": "100 - avg(rate(node_cpu_seconds_total{mode=\"idle\"}[5m])) * 100",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent", "min": 0, "max": 100 } }
+    },
+
+    {
+      "type": "stat",
+      "title": "Uptime (Hours)",
+      "gridPos": { "h": 6, "w": 6, "x": 6, "y": 9 },
+      "targets": [
+        { "expr": "(time() - node_boot_time_seconds) / 3600", "instant": true, "refId": "A" }
+      ]
+    },
+
+    {
+      "type": "stat",
+      "title": "Load Avg (1m)",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 9 },
+      "targets": [
+        { "expr": "node_load1", "instant": true, "refId": "A" }
+      ]
+    },
+
+    {
+      "type": "stat",
+      "title": "Disk Usage %",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 9 },
+      "targets": [
+        {
+          "expr": "(1 - node_filesystem_avail_bytes{fstype!=\"tmpfs\"} / node_filesystem_size_bytes{fstype!=\"tmpfs\"}) * 100",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent" } }
+    },
+
+    {
+      "type": "timeseries",
+      "title": "CPU Per Core %",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 15 },
+      "targets": [
+        {
+          "expr": "100 - rate(node_cpu_seconds_total{mode=\"idle\"}[5m]) * 100",
+          "legendFormat": "Core {{cpu}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent" } }
+    },
+
+    {
+      "type": "timeseries",
+      "title": "Network RX / TX (MB/s)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 23 },
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total{device!=\"lo\"}[5m]) / 1024 / 1024",
+          "legendFormat": "RX {{device}}",
+          "refId": "A"
+        },
+        {
+          "expr": "rate(node_network_transmit_bytes_total{device!=\"lo\"}[5m]) / 1024 / 1024",
+          "legendFormat": "TX {{device}}",
+          "refId": "B"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "MBs" } }
+    },
+
+    {
+      "type": "timeseries",
+      "title": "Disk I/O (MB/s)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 31 },
+      "targets": [
+        { "expr": "rate(node_disk_read_bytes_total[5m]) / 1024 / 1024", "legendFormat": "Read {{device}}", "refId": "A" },
+        { "expr": "rate(node_disk_written_bytes_total[5m]) / 1024 / 1024", "legendFormat": "Write {{device}}", "refId": "B" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "MBs" } }
+    },
+
+    {
+      "type": "timeseries",
+      "title": "System Temperature (°C)",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 39 },
+      "targets": [
+        { "expr": "avg(node_hwmon_temp_celsius)", "legendFormat": "Temp", "refId": "A" }
+      ],
+      "fieldConfig": { "defaults": { "unit": "celsius" } }
+    },
+
+    {
+      "type": "stat",
+      "title": "Swap Usage %",
+      "gridPos": { "h": 6, "w": 6, "x": 12, "y": 39 },
+      "targets": [
+        {
+          "expr": "(1 - node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes) * 100",
+          "instant": true,
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent" } }
+    },
+
+    {
+      "type": "stat",
+      "title": "TCP Connections",
+      "gridPos": { "h": 6, "w": 6, "x": 18, "y": 39 },
+      "targets": [
+        { "expr": "node_netstat_Tcp_CurrEstab", "instant": true, "refId": "A" }
+      ]
+    },
+
+    { "type": "row", "title": "🐳 DOCKER" },
+
+    {
+      "type": "timeseries",
+      "title": "Container CPU %",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 46 },
+      "targets": [
+        {
+          "expr": "sum(rate(container_cpu_usage_seconds_total{container=~\"$container\"}[5m])) by (container) * 100",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "percent" } }
+    },
+
+    {
+      "type": "timeseries",
+      "title": "Container Memory (MB)",
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 54 },
+      "targets": [
+        {
+          "expr": "container_memory_usage_bytes{container=~\"$container\"} / 1024 / 1024",
+          "legendFormat": "{{container}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "megabytes" } }
+    },
+
+    {
+      "type": "stat",
+      "title": "Running Containers",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 62 },
+      "targets": [
+        { "expr": "count(container_last_seen)", "instant": true, "refId": "A" }
+      ]
+    },
+
+    {
+      "type": "stat",
+      "title": "Docker Health",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 62 },
+      "targets": [
+        { "expr": "up{job=\"cadvisor\"}", "instant": true, "refId": "A" }
+      ]
+    },
+
+    { "type": "row", "title": "🌐 APPLICATION" },
+
+    {
+      "type": "stat",
+      "title": "Total Requests",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 69 },
+      "targets": [
+        { "expr": "app_requests_total", "instant": true, "refId": "A" }
+      ]
+    },
+
+    {
+      "type": "stat",
+      "title": "Request Rate (req/sec)",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 69 },
+      "targets": [
+        { "expr": "rate(app_requests_total[5m])", "instant": true, "refId": "A" }
+      ]
+    },
+
+    {
+      "type": "stat",
+      "title": "Error Rate (req/sec)",
+      "gridPos": { "h": 6, "w": 12, "x": 0, "y": 75 },
+      "targets": [
+        { "expr": "rate(app_errors_total[5m])", "instant": true, "refId": "A" }
+      ]
+    },
+
+    {
+      "type": "stat",
+      "title": "Total Errors",
+      "gridPos": { "h": 6, "w": 12, "x": 12, "y": 75 },
+      "targets": [
+        { "expr": "app_errors_total", "instant": true, "refId": "A" }
+      ]
+    }
+
+  ]
+}
