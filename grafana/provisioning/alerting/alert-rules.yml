@@ -1,64 +1,63 @@
 apiVersion: 1
 
 groups:
-  - name: host-memory-alerts
+  - orgId: 1
+    name: memory-alerts
+    folder: DevOps-Alerts
     interval: 1m
     rules:
-
-      - uid: memory_warning
+      - uid: memory-warning
         title: Memory Usage Warning
         condition: C
         data:
           - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
             datasourceUid: prometheus
             model:
-              expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+              expr: 100 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100)
+              interval: ""
               refId: A
           - refId: C
-            datasourceUid: __expr__
-            model:
-              type: threshold
-              expression: A
-              conditions:
-                - evaluator:
-                    type: gt
-                    params:
-                      - 60
-                  operator:
-                    type: and
-                  reducer:
-                    type: last
-        for: 2m
-        annotations:
-          summary: "⚠ Memory usage above 60%"
-        labels:
-          severity: warning
+            expression: A
+            type: threshold
+            conditions:
+              - evaluator:
+                  type: gt
+                  params: [60]
+                operator:
+                  type: and
+                query:
+                  params: [A]
+                reducer:
+                  type: last
+                type: query
 
-      - uid: memory_critical
+      - uid: memory-critical
         title: Memory Usage Critical
         condition: C
         data:
           - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
             datasourceUid: prometheus
             model:
-              expr: (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) * 100
+              expr: 100 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100)
+              interval: ""
               refId: A
           - refId: C
-            datasourceUid: __expr__
-            model:
-              type: threshold
-              expression: A
-              conditions:
-                - evaluator:
-                    type: gt
-                    params:
-                      - 80
-                  operator:
-                    type: and
-                  reducer:
-                    type: last
-        for: 1m
-        annotations:
-          summary: "🚨 Memory usage above 80%"
-        labels:
-          severity: critical
+            expression: A
+            type: threshold
+            conditions:
+              - evaluator:
+                  type: gt
+                  params: [80]
+                operator:
+                  type: and
+                query:
+                  params: [A]
+                reducer:
+                  type: last
+                type: query
