@@ -1,173 +1,200 @@
-🚀 DevOps Observability Stack – JARVIS War Room
+🚀 DevOps Observability Stack — JARVIS War Room
 
-A complete DevOps monitoring stack built using:
+
+
+
+
+
+
+
+A complete DevOps monitoring and observability platform built using:
 
 🐳 Docker & Docker Compose
 
 📊 Prometheus
 
-📈 Grafana
+📈 Grafana (Professional Dashboards)
 
 🖥 Node Exporter
 
 📦 cAdvisor
 
-🌐 Flask Application with Prometheus Metrics
+🌐 Flask App with Prometheus Metrics
 
-This project demonstrates real-world DevOps observability engineering including:
+🔔 Telegram Alerting
 
-Host system monitoring
+This project demonstrates real-world monitoring, alerting, and dashboard provisioning for both host systems and Docker containers.
 
-Docker container monitoring
+🧠 Architecture Overview
+Flask App → Prometheus → Grafana
+                ↑
+          Node Exporter
+                ↑
+             cAdvisor
+Data Flow
 
-Application-level metrics
+Flask app exposes /metrics
 
-Error tracking
+Prometheus scrapes:
 
-Professional Grafana dashboards
+App metrics
 
-Clean DevOps command-center UI
+Host metrics (Node Exporter)
 
-🧱 Architecture Overview
-Flask App  →  Prometheus  →  Grafana
-              ↑
-         Node Exporter
-              ↑
-           cAdvisor
-📂 Project Structure
-devops-observability-stack/
+Docker metrics (cAdvisor)
+
+Grafana visualizes everything
+
+Alerts trigger Telegram notifications
+
+📁 Project Structure
+learndevops/
 │
 ├── app.py
 ├── Dockerfile
 ├── docker-compose.yml
 ├── prometheus.yml
 │
+├── grafana/
+│   └── provisioning/
+│       ├── datasources/
+│       │   └── prometheus.yml
+│       ├── dashboards/
+│       │   └── dashboards.yml
+│       └── alerting/
+│           ├── alert-rules.yml
+│           ├── contact-points.yml
+│           └── notification-policies.yml
+│
 ├── grafana-dashboards/
-│   ├── jarvis-war-room-professional.json
-│   ├── jarvis-war-room-v6.json
-│   ├── jarvis-command-center-v4.json
-│   └── ...
+│   ├── jarvis-war-room.json
+│   └── other-dashboards.json
 │
 └── README.md
+⚙️ Prerequisites
 
-All dashboards are stored inside:
+Docker
 
-grafana-dashboards/
+Docker Compose
 
-You can directly import them into Grafana.
+Git
 
-⚙️ Features
-🖥 Host System
+🚀 Setup Instructions
+1️⃣ Clone Repository
+git clone https://github.com/saifali7243/learndevops.git
+cd learndevops
+2️⃣ Configure Environment Variables (Secrets Safe)
 
-🔥 Hero Memory Gauge
+Create a .env file:
 
-📈 Host Memory Graph (GB)
+touch .env
 
-⚡ Host CPU Gauge
+Add:
 
-💻 CPU Per Core Graph
+TELEGRAM_BOT_TOKEN=your_bot_token_here
+TELEGRAM_CHAT_ID=your_chat_id_here
 
-⏱ Uptime
+Add .env to .gitignore:
 
-💾 Disk Usage %
+.env
 
-📊 Disk I/O (Read / Write)
+⚠ Never commit real tokens to GitHub.
 
-📈 Load Average
+3️⃣ Start the Stack
+docker compose up --build -d
+4️⃣ Verify Services
+Service	URL
+Flask App	     http://localhost:5000
 
-🔄 Swap Usage %
+Prometheus     http://localhost:9090
 
-🌐 Network RX/TX
+Grafana	     http://localhost:3000
 
-🌡 System Temperature
+cAdvisor	     http://localhost:8080
 
-🔌 TCP Connections
+Node Exporter	http://localhost:9100
 
-⚙ Running Processes
+🔐 Grafana Access
+Username: admin
+Password: admin
+
+(Change immediately in production.)
+
+📊 Dashboards Included
+🖥 Host Monitoring
+
+CPU %
+
+Memory %
+
+Per-core CPU
+
+Disk Usage
+
+Disk I/O
+
+Swap Usage
+
+Load Average
+
+Uptime
+
+Network RX/TX
+
+TCP Connections
+
+File Descriptors
+
+Context Switch Rate
+
+System Temperature
 
 🐳 Docker Monitoring
 
-CPU % Per Container
+CPU per container
 
-Memory MB Per Container
+Memory per container
 
-Running Containers Count
+Container restarts
 
-Docker Health
+Running container count
 
-Container Dropdown Filter
+Container health
 
-🌐 Application Metrics
+Container dropdown filter
 
-Total Requests
+🌐 Application Monitoring
 
-Request Rate
+Total requests
 
-Error Rate
+Request rate
 
-Total Errors
+Error rate
 
-/metrics endpoint exposed for Prometheus
+Total errors
 
-🛠 Setup Instructions
-1️⃣ Clone Repository
-git clone <your-repo-url>
-cd devops-observability-stack
-2️⃣ Start the Stack
-docker compose up --build -d
-🌍 Services & URLs
-Service	URL
-Flask App	http://localhost:5000
-
-Prometheus	http://localhost:9090
-
-Grafana	http://localhost:3000
-
-cAdvisor	http://localhost:8080
-
-Node Exporter	http://localhost:9100
-🔐 Grafana Login
-
-Default credentials (if set in docker-compose):
-
-Username: admin
-Password: admin123
-📊 Import Dashboards
-
-Open Grafana → Dashboards → Import
-
-Click Upload JSON file
-
-Select a file from:
+Dashboards auto-provision from:
 
 grafana-dashboards/
+🔔 Alerting (Telegram Integration)
 
-Choose Prometheus as data source
+Alerts configured for:
 
-Click Import
+Memory > 60% → Warning
 
-📈 Application Metrics
+Memory > 80% → Critical
 
-Metrics endpoint:
+Contact points use environment variables:
 
-http://localhost:5000/metrics
+TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID
+📈 Prometheus Targets
 
-Available metrics:
-
-app_requests_total
-
-app_errors_total
-
-To simulate an error:
-
-http://localhost:5000/error
-🧠 Prometheus Targets
-
-Visit:
+Check:
 
 http://localhost:9090/targets
 
-Ensure all services are UP:
+You should see:
 
 app
 
@@ -175,89 +202,89 @@ node_exporter
 
 cadvisor
 
+All must show UP.
+
+🧪 Testing Metrics
+App Metrics
+http://localhost:5000/metrics
+Simulate Traffic
+http://localhost:5000/
+Simulate Error (if implemented)
+http://localhost:5000/error
 💾 Data Persistence
 
-Docker volumes are configured for:
+Grafana and Prometheus data are stored in Docker volumes.
 
-Grafana
-
-Prometheus
-
-PostgreSQL (if used)
-
-⚠ Do NOT run:
+⚠ Avoid deleting volumes:
 
 docker compose down -v
-
-This deletes volumes and dashboards.
 
 Use instead:
 
 docker compose down
-🎯 Learning Outcomes
+🛠 Troubleshooting
+Grafana Restarting
 
-This project demonstrates:
+Check logs:
 
-Real DevOps monitoring stack
+docker logs grafana --tail 50
 
-Prometheus instrumentation
+Common cause:
 
-PromQL usage
+Invalid YAML in alert provisioning
 
-Docker observability
+Incorrect Telegram contact point name
 
-Host-level monitoring
+Prometheus Not Scraping
 
-Professional Grafana dashboards
+Check:
 
-Practical DevOps engineering
+docker logs prometheus
 
-🚀 Future Improvements
+Then verify:
 
-Alertmanager integration
+http://localhost:9090/targets
+Telegram Alerts Not Working
 
-Slack / Email alerts
+Ensure:
 
-Loki log aggregation
+Bot token is valid
 
-Kubernetes deployment
+Chat ID is correct
 
-CI/CD integration
+Bot has been started with /start
 
-Terraform provisioning
+.env is loaded into container
 
-🏁 Conclusion
+🔍 Useful PromQL Queries
+Host CPU
+100 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
+Host Memory %
+100 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100)
+Container CPU %
+sum(rate(container_cpu_usage_seconds_total[5m])) by (container) * 100
+App Error Rate
+rate(app_errors_total[5m])
+🛡 Security Practices Implemented
 
-This repository simulates a production-style DevOps observability environment and provides a professional monitoring dashboard for:
+Environment variable secrets
 
-Host metrics
+No hardcoded API tokens
 
-Container metrics
+Dashboard provisioning via files
 
-Application metrics
+Docker volume persistence
 
-Built as a hands-on DevOps learning project.
+Modular provisioning structure
 
-Now this will render:
+🎯 Future Improvements
 
-Proper headings
+Loki log integration
 
-Clean spacing
+Alertmanager routing
 
-Clear sections
+CI/CD deployment pipeline
 
-No collapsed formatting
+Kubernetes version
 
-Looks professional on GitHub
-
-If you want, I can now:
-
-Add GitHub badges at the top
-
-Add screenshot section
-
-Add architecture diagram image
-
-Make it recruiter-optimized for resume impact
-
-You're very close to having a portfolio-level DevOps project.
+Role-based access control
