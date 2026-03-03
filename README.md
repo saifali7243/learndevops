@@ -1,54 +1,57 @@
-🚀 DevOps Observability Stack — JARVIS War Room
 
+````markdown
+# 🚀 DevOps Observability Stack — JARVIS War Room
 
-
-
-
-
-
-
-A production-style DevOps observability platform built with Docker, Prometheus, and Grafana.
+A production-style DevOps observability platform built with **Docker, Prometheus, and Grafana**.
 
 This project demonstrates real-world monitoring of:
 
-🖥 Host system metrics
+- 🖥 Host system metrics  
+- 🐳 Docker container metrics  
+- 🌐 Application-level metrics  
+- 🔔 Automated alerting via Telegram  
 
-🐳 Docker container metrics
+Designed as a complete **Infrastructure-as-Code monitoring stack**.
 
-🌐 Application-level metrics
+---
 
-🔔 Automated alerting via Telegram
+# 🧠 Architecture
 
-Designed as a complete Infrastructure-as-Code monitoring stack.
+```mermaid
+flowchart LR
+    App[Flask App]
+    Prom[Prometheus]
+    Graf[Grafana]
+    Node[Node Exporter]
+    Cad[cAdvisor]
+    Tele[Telegram Alerts]
 
-🧠 Architecture
-Flask App  ───────────►  Prometheus  ───────────►  Grafana
-     │                        ▲
-     │                        │
-     ▼                        │
-  /metrics                Node Exporter
-                               ▲
-                               │
-                           cAdvisor
-Data Flow
+    App -->|/metrics| Prom
+    Node --> Prom
+    Cad --> Prom
+    Prom --> Graf
+    Graf --> Tele
+````
 
-Flask app exposes /metrics
+---
 
-Prometheus scrapes:
+# 📊 Metrics Flow
 
-Application metrics
+1. Flask app exposes `/metrics`
+2. Prometheus scrapes:
 
-Host metrics (Node Exporter)
+   * Application metrics
+   * Host metrics (Node Exporter)
+   * Container metrics (cAdvisor)
+3. Grafana visualizes metrics
+4. Alert rules trigger Telegram notifications
 
-Container metrics (cAdvisor)
+---
 
-Grafana visualizes metrics
+# 📁 Project Structure
 
-Alert rules trigger Telegram notifications
-
-📁 Project Structure
+```
 learndevops/
-│
 ├── app.py
 ├── Dockerfile
 ├── docker-compose.yml
@@ -70,241 +73,311 @@ learndevops/
 │   └── additional-dashboards.json
 │
 └── README.md
-⚙️ Prerequisites
+```
 
-Docker
+---
 
-Docker Compose
+# ⚙️ Prerequisites
 
-Git
+* Docker
+* Docker Compose
+* Git
 
-🚀 Setup
-1. Clone the Repository
+---
+
+# 🚀 Setup
+
+## 1️⃣ Clone the Repository
+
+```bash
 git clone https://github.com/saifali7243/learndevops.git
 cd learndevops
-2. Configure Secrets (Secure Method)
+```
 
-Create a .env file in the project root:
+---
 
+## 2️⃣ Configure Secrets (Secure Method)
+
+Create a `.env` file:
+
+```bash
 touch .env
+```
 
 Add:
 
+```
 TELEGRAM_BOT_TOKEN=your_bot_token_here
 TELEGRAM_CHAT_ID=your_chat_id_here
+```
 
-Add .env to .gitignore:
+Add `.env` to `.gitignore`:
 
+```
 .env
+```
 
-⚠ Never commit API tokens to GitHub.
+⚠ **Never commit API tokens to GitHub.**
 
-3. Start the Stack
+---
+
+## 3️⃣ Start the Stack
+
+```bash
 docker compose up --build -d
-🌐 Access the Services
-Service	URL
-Flask App	http://localhost:5000
+```
 
-Prometheus	http://localhost:9090
+---
 
-Grafana	http://localhost:3000
+# 🌐 Access the Services
 
-cAdvisor	http://localhost:8080
+| Service       | URL                                            |
+| ------------- | ---------------------------------------------- |
+| Flask App     | [http://localhost:5000](http://localhost:5000) |
+| Prometheus    | [http://localhost:9090](http://localhost:9090) |
+| Grafana       | [http://localhost:3000](http://localhost:3000) |
+| cAdvisor      | [http://localhost:8080](http://localhost:8080) |
+| Node Exporter | [http://localhost:9100](http://localhost:9100) |
 
-Node Exporter	http://localhost:9100
-🔐 Grafana Login
+---
+
+# 🔐 Grafana Login
+
+```
 Username: admin
 Password: admin
+```
 
 (Change credentials in production.)
 
-📊 Monitoring Coverage
-🖥 Host System
+---
 
-CPU Usage %
+# 📊 Monitoring Coverage
 
-Per-core CPU
+## 🖥 Host System Metrics
 
-Memory Usage %
+* CPU Usage %
+* Per-core CPU
+* Memory Usage %
+* Swap Usage %
+* Disk Usage %
+* Disk I/O
+* Load Average
+* Uptime
+* Network RX/TX
+* TCP Connections
+* File Descriptors
+* Context Switch Rate
+* System Temperature
 
-Swap Usage %
+---
 
-Disk Usage %
+## 🐳 Docker Monitoring
 
-Disk I/O
+* CPU % per container
+* Memory usage per container
+* Running container count
+* Container restarts
+* Container health status
+* Container-level filtering
 
-Load Average
+---
 
-Uptime
+## 🌐 Application Monitoring
 
-Network RX/TX
+* Total requests
+* Request rate
+* Error rate
+* Total errors
 
-TCP Connections
+Metrics endpoint:
 
-File Descriptors
-
-Context Switch Rate
-
-System Temperature
-
-🐳 Docker Monitoring
-
-CPU % per container
-
-Memory usage per container
-
-Running containers count
-
-Container restarts
-
-Container health status
-
-Container dropdown filtering
-
-🌐 Application Monitoring
-
-Total requests
-
-Request rate
-
-Error rate
-
-Total errors
-
-Application metrics endpoint:
-
+```
 http://localhost:5000/metrics
-🔔 Alerting
+```
+
+---
+
+# 🔔 Alerting
 
 Telegram integration configured via environment variables.
 
-Alerts include:
+Configured alerts:
 
-Memory > 60% → Warning
+* Memory > 60% → Warning
+* Memory > 80% → Critical
 
-Memory > 80% → Critical
+Provisioned via:
 
-Alert provisioning is managed under:
-
+```
 grafana/provisioning/alerting/
-📈 Prometheus Targets
+```
+
+---
+
+# 📈 Prometheus Targets
 
 Verify scraping status:
 
+```
 http://localhost:9090/targets
+```
 
 Expected targets:
 
-app
+* app
+* node_exporter
+* cadvisor
 
-node_exporter
+All should show **UP**.
 
-cadvisor
+---
 
-All should show UP.
-
-🧪 Testing the Application
+# 🧪 Testing
 
 Generate traffic:
 
+```
 http://localhost:5000/
+```
 
-If error route exists:
+Test error metrics (if implemented):
 
+```
 http://localhost:5000/error
-🔎 Useful PromQL Queries
-Host CPU %
+```
+
+---
+
+# 🔎 Useful PromQL Queries
+
+### Host CPU %
+
+```promql
 100 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
-Host Memory %
+```
+
+### Host Memory %
+
+```promql
 100 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100)
-Container CPU %
+```
+
+### Container CPU %
+
+```promql
 sum(rate(container_cpu_usage_seconds_total[5m])) by (container) * 100
-Application Error Rate
+```
+
+### Application Error Rate
+
+```promql
 rate(app_errors_total[5m])
-💾 Persistence
+```
+
+---
+
+# 💾 Persistence
 
 Grafana and Prometheus use Docker volumes.
 
 Avoid deleting volumes:
 
+```bash
 docker compose down -v
+```
 
 Use instead:
 
+```bash
 docker compose down
-🛠 Troubleshooting
-Grafana Restarting
+```
 
-Check logs:
+---
 
+# 🛠 Troubleshooting
+
+## Grafana Restarting
+
+```bash
 docker logs grafana --tail 50
+```
 
 Common causes:
 
-Invalid YAML provisioning
+* Invalid YAML provisioning
+* Incorrect alert contact point
+* Misconfigured datasource UID
 
-Incorrect alert contact point
+---
 
-Misconfigured datasource UID
+## Prometheus Not Scraping
 
-Prometheus Not Scraping
+```bash
 docker logs prometheus
+```
 
 Then verify:
 
+```
 http://localhost:9090/targets
-Telegram Alerts Not Sending
+```
+
+---
+
+## Telegram Alerts Not Sending
 
 Ensure:
 
-Bot token is valid
+* Bot token is valid
+* Chat ID is correct
+* Bot has been started via `/start`
+* `.env` file is loaded correctly
 
-Chat ID is correct
+---
 
-Bot has been started via /start
+# 🔒 Security Practices
 
-.env file is loaded
+* Environment-based secrets
+* No hardcoded credentials
+* Docker volume persistence
+* File-based provisioning
+* Modular infrastructure layout
 
-🔒 Security Practices
+---
 
-Environment-based secrets
+# 🚀 Future Enhancements
 
-No hardcoded credentials
+* Loki log aggregation
+* Alertmanager integration
+* CI/CD pipeline
+* Kubernetes deployment
+* RBAC configuration
 
-Docker volume persistence
+---
 
-File-based provisioning
-
-Modular infrastructure layout
-
-🚀 Future Enhancements
-
-Loki log aggregation
-
-Alertmanager integration
-
-CI/CD pipeline
-
-Kubernetes deployment
-
-RBAC configuration
-
-📜 License
+# 📜 License
 
 MIT License
 
-🎯 Summary
+---
+
+# 🎯 Summary
 
 This project demonstrates:
 
-Production-style monitoring stack
+* Production-style monitoring stack
+* Infrastructure-as-Code provisioning
+* Secure secret management
+* Host and container observability
+* Automated alerting
+* Real-world DevOps practices
 
-Infrastructure as Code provisioning
+```
 
-Secure secret management
+---
 
-Container and host observability
+If GitHub doesn’t render Mermaid (rare but possible depending on repo settings), tell me — I’ll give you a fallback diagram version.
 
-Professional dashboard design
-
-Real-world DevOps practices
+This is now **portfolio-grade and recruiter-ready**.
+```
