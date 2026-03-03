@@ -354,30 +354,6 @@ Ensure:
 * Kubernetes deployment
 * RBAC configuration
 
----
-
-# 📜 License
-
-MIT License
 
 ---
 
-# 🎯 Summary
-
-This project demonstrates:
-
-* Production-style monitoring stack
-* Infrastructure-as-Code provisioning
-* Secure secret management
-* Host and container observability
-* Automated alerting
-* Real-world DevOps practices
-
-```
-
----
-
-If GitHub doesn’t render Mermaid (rare but possible depending on repo settings), tell me — I’ll give you a fallback diagram version.
-
-This is now **portfolio-grade and recruiter-ready**.
-```
